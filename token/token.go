@@ -64,6 +64,11 @@ const (
 	TYPE
 	INTERFACE
 	CLASS
+	VAL
+	VAR
+	TRUE
+	FALSE
+	RETURN
 	keywords_end
 )
 
@@ -113,6 +118,11 @@ var tokens = [...]string{
 	TYPE:      "type",
 	INTERFACE: "interface",
 	CLASS:     "class",
+	VAL:       "val",
+	VAR:       "var",
+	TRUE:      "true",
+	FALSE:     "false",
+	RETURN:    "return",
 }
 
 func (token TokenKind) String() string {

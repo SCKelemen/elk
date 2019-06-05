@@ -113,6 +113,11 @@ func TestAllKeywords(t *testing.T) {
 	type
 	interface
 	class
+	val
+	var
+	true
+	false
+	return
 	`
 
 	tests := []struct {
@@ -124,6 +129,11 @@ func TestAllKeywords(t *testing.T) {
 		{token.TYPE, "type"},
 		{token.INTERFACE, "interface"},
 		{token.CLASS, "class"},
+		{token.VAL, "val"},
+		{token.VAR, "var"},
+		{token.TRUE, "true"},
+		{token.FALSE, "false"},
+		{token.RETURN, "return"},
 		{token.EOF, ""},
 	}
 
