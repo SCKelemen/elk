@@ -26,3 +26,18 @@ func IsIdentifierInitialChar(ch rune) bool {
 func IsIdentifierChar(ch rune) bool {
 	return ch == '_' || IsLetter(ch) || IsDigit(ch)
 }
+
+// Numbers start with Digits
+// May contain [0-9] || _
+
+func IsNumericInitialChar(ch rune) bool {
+	return IsDigit(ch)
+}
+
+func IsNumericChar(ch rune) bool {
+	return IsDigit(ch) || ch == '_'
+}
+
+func IsQuote(ch rune) bool {
+	return ch == '"'
+}

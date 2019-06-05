@@ -61,8 +61,8 @@ var tokens = [...]string{
 	COLON:      ":",
 	UNDERSCORE: "_",
 
-	FUNC:  "FUNC",
-	MATCH: "MATCH",
+	FUNC:  "func",
+	MATCH: "match",
 }
 
 func (token TokenKind) String() string {

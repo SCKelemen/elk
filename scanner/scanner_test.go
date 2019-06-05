@@ -43,11 +43,11 @@ func TestExampleProgram(t *testing.T) {
 	input := `
 	func itoa(index: int): string {
 		index match {
-			1:	"one"
-			2:	"two"
-			3:	"three"
-			4:	"four"
-			_:	"Error"
+			1 :	"one"
+			2 :	"two"
+			3 :	"three"
+			4 :	"four"
+			_ :	"Error"
 		}
 	}
 	`

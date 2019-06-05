@@ -69,8 +69,14 @@ func (s *Scanner) NextToken() token.Token {
 	default:
 		if util.IsIdentifierInitialChar(s.current) {
 			tok.Literal = s.readIdentifier()
-			tok.Kind = token.LookupIdent(tok.Literal)
+			tok.Kind = token.Lookup(tok.Literal)
 			return tok
+		} else if util.IsNumericInitialChar(s.current) {
+			tok.Kind = token.INTEGER
+			tok.Literal = s.readNumber()
+		} else if util.IsQuote(s.current) {
+			tok.Kind = token.STRING
+			tok.Literal = s.readStringLiteral()
 		} else {
 			tok = newToken(token.ILLEGAL, s.current)
 		}
@@ -88,6 +94,32 @@ func (s *Scanner) readIdentifier() string {
 	for util.IsIdentifierChar(s.current) {
 		s.readChar()
 	}
+	return s.input[position:s.head]
+}
+
+// readNumber
+// Numbers begin with Digit
+// Numbers may contain Digit || '_'
+func (s *Scanner) readNumber() string {
+	position := s.head
+	for util.IsNumericChar(s.current) {
+		s.readChar()
+	}
+	return s.input[position:s.head]
+}
+
+// readStringLiteral
+//
+//
+func (s *Scanner) readStringLiteral() string {
+	position := s.head
+	s.read = s.head + 1
+
+	for !util.IsQuote(rune(s.input[s.read])) {
+		s.read++
+	}
+	s.read++ // need to read that last one
+	s.head = s.read
 	return s.input[position:s.head]
 }
 
