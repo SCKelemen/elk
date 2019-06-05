@@ -156,6 +156,14 @@ func TestAllPunctuation(t *testing.T) {
 	!
 	[
 	]
+	<
+	>
+	^
+	=
+	+
+	-
+	*
+	/
 	`
 
 	tests := []struct {
@@ -173,6 +181,14 @@ func TestAllPunctuation(t *testing.T) {
 		{token.BANG, "!"},
 		{token.LBRACK, "["},
 		{token.RBRACK, "]"},
+		{token.LCHEV, "<"},
+		{token.RCHEV, ">"},
+		{token.CARAT, "^"},
+		{token.EQL, "="},
+		{token.ADD, "+"},
+		{token.SUB, "-"},
+		{token.MUL, "*"},
+		{token.QUO, "/"},
 		{token.EOF, ""},
 	}
 

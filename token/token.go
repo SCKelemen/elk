@@ -33,6 +33,10 @@ const (
 	LBRACK // [
 	RBRACK // ]
 
+	LCHEV // <
+	RCHEV // >
+	CARAT // ^
+
 	// QUO        // "
 
 	COLON      // :
@@ -47,6 +51,12 @@ const (
 	EROTEME // ?
 	BANG    // !
 	punctuation_end
+
+	EQL // =
+	ADD // +
+	SUB // -
+	MUL // *
+	QUO // /
 
 	_keywords
 	FUNC
@@ -76,6 +86,10 @@ var tokens = [...]string{
 	LBRACK: "[",
 	RBRACK: "]",
 
+	LCHEV: "<",
+	RCHEV: ">",
+	CARAT: "^",
+
 	COLON:      ":",
 	SEMICOLON:  ";",
 	UNDERSCORE: "_",
@@ -87,6 +101,12 @@ var tokens = [...]string{
 
 	EROTEME: "?",
 	BANG:    "!",
+
+	EQL: "=",
+	ADD: "+",
+	SUB: "-",
+	MUL: "*",
+	QUO: "/",
 
 	FUNC:      "func",
 	MATCH:     "match",

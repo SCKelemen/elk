@@ -71,10 +71,26 @@ func (s *Scanner) NextToken() token.Token {
 		tok = newToken(token.LBRACK, s.current)
 	case ']':
 		tok = newToken(token.RBRACK, s.current)
+	case '<':
+		tok = newToken(token.LCHEV, s.current)
+	case '>':
+		tok = newToken(token.RCHEV, s.current)
+	case '^':
+		tok = newToken(token.CARAT, s.current)
 	case '?':
 		tok = newToken(token.EROTEME, s.current)
 	case '!':
 		tok = newToken(token.BANG, s.current)
+	case '=':
+		tok = newToken(token.EQL, s.current)
+	case '+':
+		tok = newToken(token.ADD, s.current)
+	case '-':
+		tok = newToken(token.SUB, s.current)
+	case '*':
+		tok = newToken(token.MUL, s.current)
+	case '/':
+		tok = newToken(token.QUO, s.current)
 	case 0:
 		tok.Literal = ""
 		tok.Kind = token.EOF
