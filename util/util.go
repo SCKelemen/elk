@@ -16,3 +16,13 @@ func IsLetter(ch rune) bool {
 func IsWhitespace(ch rune) bool {
 	return ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r'
 }
+
+// Identifiers start with Letters or _
+// Identifiers may contain Letters, _, or Digits
+
+func IsIdentifierInitialChar(ch rune) bool {
+	return ch == '_' || IsLetter(ch)
+}
+func IsIdentifierChar(ch rune) bool {
+	return ch == '_' || IsLetter(ch) || IsDigit(ch)
+}

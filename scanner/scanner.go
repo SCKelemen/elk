@@ -48,6 +48,8 @@ func (s *Scanner) readChar() {
 func (s *Scanner) NextToken() token.Token {
 	var tok token.Token
 
+	s.skipWhitespace()
+
 	switch s.current {
 	case '_':
 		tok = newToken(token.UNDERSCORE, s.current)
@@ -64,10 +66,29 @@ func (s *Scanner) NextToken() token.Token {
 	case 0:
 		tok.Literal = ""
 		tok.Kind = token.EOF
+	default:
+		if util.IsIdentifierInitialChar(s.current) {
+			tok.Literal = s.readIdentifier()
+			tok.Kind = token.LookupIdent(tok.Literal)
+			return tok
+		} else {
+			tok = newToken(token.ILLEGAL, s.current)
+		}
 	}
 
 	s.readChar()
 	return tok
+}
+
+// readIdentifier
+// Identifiers begin with '_' || Letter
+// Identifiers may contain '_' || Letter || Digit
+func (s *Scanner) readIdentifier() string {
+	position := s.head
+	for util.IsIdentifierChar(s.current) {
+		s.readChar()
+	}
+	return s.input[position:s.head]
 }
 
 // skipWhitespace 's only responsibility is to

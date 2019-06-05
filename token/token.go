@@ -36,7 +36,7 @@ const (
 	UNDERSCORE // _
 	punctuation_end
 
-	keywords
+	_keywords
 	FUNC
 	MATCH
 	keywords_end
@@ -77,6 +77,34 @@ func (token TokenKind) String() string {
 		s = "token(" + strconv.Itoa(int(token)) + ")"
 	}
 	return s
+}
+
+var keywords map[string]TokenKind
+
+func init() {
+	keywords = make(map[string]TokenKind)
+	for i := _keywords + 1; i < keywords_end; i++ {
+		keywords[tokens[i]] = i
+	}
+}
+
+func Lookup(ident string) TokenKind {
+	if tok, isKeyword := keywords[ident]; isKeyword {
+		return tok
+	}
+	return IDENTITY
+}
+
+var kw = map[string]TokenKind{
+	"func":  FUNC,
+	"match": MATCH,
+}
+
+func LookupIdent(ident string) TokenKind {
+	if tok, ok := kw[ident]; ok {
+		return tok
+	}
+	return IDENTITY
 }
 
 // goal: Lex the following:
