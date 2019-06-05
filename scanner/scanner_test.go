@@ -105,3 +105,90 @@ func TestExampleProgram(t *testing.T) {
 		}
 	}
 }
+
+func TestAllKeywords(t *testing.T) {
+	input := `
+	func 
+	match 
+	type
+	interface
+	class
+	`
+
+	tests := []struct {
+		expectedType    token.TokenKind
+		expectedLiteral string
+	}{
+		{token.FUNC, "func"},
+		{token.MATCH, "match"},
+		{token.TYPE, "type"},
+		{token.INTERFACE, "interface"},
+		{token.CLASS, "class"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		token := l.NextToken()
+
+		if token.Kind != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
+				i, tt.expectedType, token.Kind)
+		}
+
+		if token.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
+				i, tt.expectedLiteral, token.Literal)
+		}
+	}
+}
+
+func TestAllPunctuation(t *testing.T) {
+	input := `
+	.
+	..
+	...
+	....
+	:
+	;
+	?
+	!
+	[
+	]
+	`
+
+	tests := []struct {
+		expectedType    token.TokenKind
+		expectedLiteral string
+	}{
+		{token.DOT, "."},
+		{token.DOTDOT, ".."},
+		{token.ELIPSIS, "..."},
+		{token.ELIPSIS, "..."},
+		{token.DOT, "."},
+		{token.COLON, ":"},
+		{token.SEMICOLON, ";"},
+		{token.EROTEME, "?"},
+		{token.BANG, "!"},
+		{token.LBRACK, "["},
+		{token.RBRACK, "]"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		token := l.NextToken()
+
+		if token.Kind != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
+				i, tt.expectedType, token.Kind)
+		}
+
+		if token.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
+				i, tt.expectedLiteral, token.Literal)
+		}
+	}
+}

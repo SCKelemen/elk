@@ -51,10 +51,14 @@ func (s *Scanner) NextToken() token.Token {
 	s.skipWhitespace()
 
 	switch s.current {
+	case '.':
+		tok = s.readDots()
 	case '_':
 		tok = newToken(token.UNDERSCORE, s.current)
 	case ':':
 		tok = newToken(token.COLON, s.current)
+	case ';':
+		tok = newToken(token.SEMICOLON, s.current)
 	case '(':
 		tok = newToken(token.LPAREN, s.current)
 	case ')':
@@ -63,6 +67,14 @@ func (s *Scanner) NextToken() token.Token {
 		tok = newToken(token.LBRACE, s.current)
 	case '}':
 		tok = newToken(token.RBRACE, s.current)
+	case '[':
+		tok = newToken(token.LBRACK, s.current)
+	case ']':
+		tok = newToken(token.RBRACK, s.current)
+	case '?':
+		tok = newToken(token.EROTEME, s.current)
+	case '!':
+		tok = newToken(token.BANG, s.current)
 	case 0:
 		tok.Literal = ""
 		tok.Kind = token.EOF
@@ -121,6 +133,31 @@ func (s *Scanner) readStringLiteral() string {
 	s.read++ // need to read that last one
 	s.head = s.read
 	return s.input[position:s.head]
+}
+
+// readDots
+// DOT: .
+// DOTDOT: ..
+// ELIPSIS: ...
+func (s *Scanner) readDots() token.Token {
+	position := s.head
+	var dotCount = 1
+	s.read = s.head + 1
+	for rune(s.input[s.read]) == '.' && dotCount < 3 {
+		dotCount++
+		s.read++
+	}
+	s.head = s.read
+	var kind = token.ILLEGAL
+	switch dotCount {
+	case 1:
+		kind = token.DOT
+	case 2:
+		kind = token.DOTDOT
+	case 3:
+		kind = token.ELIPSIS
+	}
+	return token.Token{Kind: kind, Literal: s.input[position:s.head]}
 }
 
 // skipWhitespace 's only responsibility is to

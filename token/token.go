@@ -30,15 +30,30 @@ const (
 	LBRACE // {
 	RBRACE // }
 
+	LBRACK // [
+	RBRACK // ]
+
 	// QUO        // "
 
 	COLON      // :
+	SEMICOLON  // ;
 	UNDERSCORE // _
+	COMMA      // ,
+
+	DOT     // .
+	DOTDOT  // ..
+	ELIPSIS // ...
+
+	EROTEME // ?
+	BANG    // !
 	punctuation_end
 
 	_keywords
 	FUNC
 	MATCH
+	TYPE
+	INTERFACE
+	CLASS
 	keywords_end
 )
 
@@ -58,11 +73,26 @@ var tokens = [...]string{
 	LBRACE: "{",
 	RBRACE: "}",
 
-	COLON:      ":",
-	UNDERSCORE: "_",
+	LBRACK: "[",
+	RBRACK: "]",
 
-	FUNC:  "func",
-	MATCH: "match",
+	COLON:      ":",
+	SEMICOLON:  ";",
+	UNDERSCORE: "_",
+	COMMA:      ",",
+
+	DOT:     ".",
+	DOTDOT:  "..",
+	ELIPSIS: "...",
+
+	EROTEME: "?",
+	BANG:    "!",
+
+	FUNC:      "func",
+	MATCH:     "match",
+	TYPE:      "type",
+	INTERFACE: "interface",
+	CLASS:     "class",
 }
 
 func (token TokenKind) String() string {
@@ -90,18 +120,6 @@ func init() {
 
 func Lookup(ident string) TokenKind {
 	if tok, isKeyword := keywords[ident]; isKeyword {
-		return tok
-	}
-	return IDENTITY
-}
-
-var kw = map[string]TokenKind{
-	"func":  FUNC,
-	"match": MATCH,
-}
-
-func LookupIdent(ident string) TokenKind {
-	if tok, ok := kw[ident]; ok {
 		return tok
 	}
 	return IDENTITY
