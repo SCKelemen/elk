@@ -28,17 +28,19 @@ func (p *Program) TokenLiteral() string {
 	}
 }
 
-type ValStatement struct {
-	Token token.Token // token.VAL
+// actual classes
+
+type LetStatement struct {
+	Token token.Token
 	Name  *Identifier
 	Value Expression
 }
 
-func (vs *ValStatement) statementNode()       {}
-func (vs *ValStatement) TokenLiteral() string { return vs.Token.Literal }
+func (ls *LetStatement) statementNode()       {}
+func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
 type Identifier struct {
-	Token token.Token // the token.IDENT token
+	Token token.Token
 	Value string
 }
 

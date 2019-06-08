@@ -69,6 +69,7 @@ const (
 	TRUE
 	FALSE
 	RETURN
+	LET
 	keywords_end
 )
 
@@ -123,6 +124,7 @@ var tokens = [...]string{
 	TRUE:      "true",
 	FALSE:     "false",
 	RETURN:    "return",
+	LET:       "let",
 }
 
 func (token TokenKind) String() string {

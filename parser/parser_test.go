@@ -1,28 +1,35 @@
 package parser
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/SCKelemen/elk/ast"
 	"github.com/SCKelemen/elk/scanner"
 )
 
-func TestValStatement(t *testing.T) {
+func TestLetStatement(t *testing.T) {
 	input := `
-	val x = 5;
-	val y = 10;
-	val foobar = 838383;
+	let x = 5;
+	let y = 10;
+	let foo = 838383;
 	`
+	//input = fmt.Sprintf("%s%s", input, string(rune(0)))
 	s := scanner.New(input)
 	p := New(s)
 
 	program := p.ParseProgram()
+
 	if program == nil {
-		t.Fatalf("ParseProgram() returned nil")
+		t.Fatalf("ParseProgram() return nil")
+	}
+	for ind, st := range program.Statements {
+		fmt.Printf("%v\t%s\n", ind, st)
+		t.Logf("%v\t%s\n", ind, st)
+
 	}
 	if len(program.Statements) != 3 {
-		t.Fatalf("program.Statements does not contain 3 statements. got=%d",
-			len(program.Statements))
+		t.Fatalf("program.Statements doesnt contain 3. got=%d", len(program.Statements))
 	}
 
 	tests := []struct {
@@ -30,38 +37,37 @@ func TestValStatement(t *testing.T) {
 	}{
 		{"x"},
 		{"y"},
-		{"foobar"},
+		{"foo"},
 	}
 
 	for i, tt := range tests {
 		stmt := program.Statements[i]
-		if !testValStatement(t, stmt, tt.expectedIdentifier) {
+		if !testLetStatement(t, stmt, tt.expectedIdentifier) {
+			t.Logf("%v %s", i, stmt)
 			return
 		}
 	}
-
 }
-
-func testValStatement(t *testing.T, s ast.Statement, name string) bool {
-	if s.TokenLiteral() != "val" {
-		t.Errorf("s.TokenLiteral not 'val'. got=%q", s.TokenLiteral())
+func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
+	if s.TokenLiteral() != "let" {
+		t.Errorf("s.TokenLiteral not let, got=%q", s.TokenLiteral())
 		return false
 	}
 
-	valStmt, ok := s.(*ast.ValStatement)
+	letStatement, ok := s.(*ast.LetStatement)
+
 	if !ok {
-		t.Errorf("s not *ast.ValStatement. got=%T", s)
+		t.Errorf("s not *ast.LetStatement. got=%T", s)
 		return false
 	}
 
-	if valStmt.Name.Value != name {
-		t.Errorf("valStmt.Name.Value not '%s'. got=%s", name, valStmt.Name.Value)
+	if letStatement.Name.Value != name {
+		t.Errorf("letStmt.Name.Value not %s, got %s", name, letStatement.Name.Value)
 		return false
 	}
 
-	if valStmt.Name.TokenLiteral() != name {
-		t.Errorf("valStmt.Name.TokenLiteral() not '%s'. got=%s",
-			name, valStmt.Name.TokenLiteral())
+	if letStatement.Name.TokenLiteral() != name {
+		t.Errorf("letstmt.Name.TokenLit npt %s, got %s", name, letStatement.Name.TokenLiteral())
 		return false
 	}
 

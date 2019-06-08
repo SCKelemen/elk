@@ -118,6 +118,7 @@ func TestAllKeywords(t *testing.T) {
 	true
 	false
 	return
+	let
 	`
 
 	tests := []struct {
@@ -134,6 +135,7 @@ func TestAllKeywords(t *testing.T) {
 		{token.TRUE, "true"},
 		{token.FALSE, "false"},
 		{token.RETURN, "return"},
+		{token.LET, "let"},
 		{token.EOF, ""},
 	}
 

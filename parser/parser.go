@@ -7,82 +7,80 @@ import (
 )
 
 type Parser struct {
-	s *scanner.Scanner
-
-	ct token.Token
-	nt token.Token
+	s       *scanner.Scanner
+	current token.Token
+	next    token.Token
 }
 
 func New(s *scanner.Scanner) *Parser {
 	p := &Parser{s: s}
-	p.next()
-	p.next()
+	p.nextToken()
+	p.nextToken()
 	return p
 }
 
-func (p *Parser) next() {
-	p.ct = p.nt
-	p.nt = p.s.NextToken()
+func (p *Parser) nextToken() {
+	p.current = p.next
+	p.next = p.s.NextToken()
 }
 
 func (p *Parser) ParseProgram() *ast.Program {
-	program := &ast.Program{}
-	program.Statements = []ast.Statement{}
+	prog := &ast.Program{}
+	prog.Statements = []ast.Statement{}
 
-	for p.ct.Kind != token.EOF {
+	for p.current.Kind != token.EOF {
 		stmt := p.parseStatement()
 		if stmt != nil {
-			program.Statements = append(program.Statements, stmt)
+			prog.Statements = append(prog.Statements, stmt)
 		}
-		p.next()
+		p.nextToken()
 	}
 
-	return program
+	return prog
 }
 
 func (p *Parser) parseStatement() ast.Statement {
-	switch p.ct.Kind {
-	case token.VAL:
-		return p.parseValStatement()
+	switch p.current.Kind {
+	case token.LET:
+		return p.parseLetStatement()
 	default:
 		return nil
 	}
 }
 
-func (p *Parser) parseValStatement() *ast.ValStatement {
-	stmt := &ast.ValStatement{Token: p.ct}
+func (p *Parser) parseLetStatement() *ast.LetStatement {
 
-	if !p.expectNT(token.IDENTITY) {
+	stmt := &ast.LetStatement{Token: p.current}
+
+	if !p.expectNext(token.IDENTITY) {
+		//fmt.Printf("expected to be followed by IDENTITY, but was followed by %T \n", next)
 		return nil
 	}
 
-	stmt.Name = &ast.Identifier{Token: p.ct, Value: p.ct.Literal}
+	stmt.Name = &ast.Identifier{Token: p.current, Value: p.current.Literal}
 
-	if !p.expectNT(token.EQL) {
+	if !p.expectNext(token.EQL) {
 		return nil
 	}
 
-	// TODO: We're skipping the expressions until we
-	// encounter a semicolon
-	for !p.isCT(token.SEMICOLON) {
-		p.next()
+	// skip exp
+	for !p.isCurrent(token.SEMICOLON) {
+		p.nextToken()
 	}
-
 	return stmt
 }
 
-func (p *Parser) isCT(kind token.TokenKind) bool {
-	return p.ct.Kind == kind
-}
-func (p *Parser) isNT(kind token.TokenKind) bool {
-	return p.nt.Kind == kind
+func (p *Parser) isCurrent(kind token.TokenKind) bool {
+	return p.current.Kind == kind
 }
 
-func (p *Parser) expectNT(kind token.TokenKind) bool {
-	if p.isNT(kind) {
-		p.next()
+func (p *Parser) isNext(kind token.TokenKind) bool {
+	return p.next.Kind == kind
+}
+func (p *Parser) expectNext(kind token.TokenKind) bool {
+	if p.isNext(kind) {
+		p.nextToken()
 		return true
-	} else {
-		return false
 	}
+	return false
 }

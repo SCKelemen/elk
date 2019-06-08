@@ -95,6 +95,10 @@ func (s *Scanner) NextToken() token.Token {
 		tok.Literal = ""
 		tok.Kind = token.EOF
 	default:
+		if s.current == 'E' {
+			tok.Literal = "EOF"
+			tok.Kind = token.EOF
+		}
 		if util.IsIdentifierInitialChar(s.current) {
 			tok.Literal = s.readIdentifier()
 			tok.Kind = token.Lookup(tok.Literal)
