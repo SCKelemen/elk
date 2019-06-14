@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/SCKelemen/elk/ast"
 	"github.com/SCKelemen/elk/scanner"
 	"github.com/SCKelemen/elk/token"
@@ -10,13 +12,18 @@ type Parser struct {
 	s       *scanner.Scanner
 	current token.Token
 	next    token.Token
+	errata  []string
 }
 
 func New(s *scanner.Scanner) *Parser {
-	p := &Parser{s: s}
+	p := &Parser{s: s, errata: []string{}}
 	p.nextToken()
 	p.nextToken()
 	return p
+}
+
+func (p *Parser) Errors() []string {
+	return p.errata
 }
 
 func (p *Parser) nextToken() {
@@ -83,4 +90,9 @@ func (p *Parser) expectNext(kind token.TokenKind) bool {
 		return true
 	}
 	return false
+}
+
+func (p *Parser) peekError(t token.TokenKind) {
+	msg := fmt.Sprintf("expected next token to be of type %s, got %s instead", t, p.next.Kind)
+	p.errata = append(p.errata, msg)
 }
